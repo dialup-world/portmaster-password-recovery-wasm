@@ -5,7 +5,7 @@ Livingston/Lucent PortMasters may have a password set if they are purchased used
 
 ## Usage
 
-A live demo is available at https://dialup.world/portmaster-password/
+A live demo is available at https://dialup.world/portmaster-password/. It seems to work in FireFox, Chrome, and Safari.
 
 The necessary files to run this tool are `index.htm`, `mz_web.js`, and `mz_web.wasm` and can be dropped into any web server. Due to limitations with Wasm, this MUST be run via a web server, it cannot be loaded from the local filesystem.
 
