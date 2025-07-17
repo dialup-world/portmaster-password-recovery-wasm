@@ -1,3 +1,64 @@
+/* 
+ * Modification of mz.c so it can be compiled by Emscripten
+ * and the resulting .wasm file can run in a browser. The
+ * original messages from mz.c are preserved below.
+ *
+ * 2025-07-16 Mike Dank / Famicoman
+ */
+
+/*
+ * This code implements a RESPONSE generator for CHALLENGES
+ * originated trought the password override procedure of
+ * Livingston Remote Access equipment. Namely, it was tested
+ * with PortMaster3 known-good CHALLENGE/RESPONSE pairs, and
+ * hands-on on a PortMaster3 unit. It's hoped to work on all
+ * ranges of equipment that implement the same procedure for
+ * password override.
+ *
+ * The RESPONSE is just an MD5 digest (converted to a limited
+ * range of ascii chars) of a message composed from the
+ * CHALLENGE (16 bytes, all in the same ascii range) and from
+ * 40 extra bytes.
+ *
+ * If you use this code, in whatever way, I would rather like
+ * you to keep some reference to it's chosen name (mz). That is
+ * not, however, a requirement. Like the MD5 code for which I'm
+ * grateful, this code is in the public domain; do with it what
+ * you wish.
+ *
+ * August, 2001 - pmsac@toxyn.org
+ */
+
+/* The following is the original message for the MD5 code
+ * with a little add-on from me */
+
+/*
+ * This code implements the MD5 message-digest algorithm.
+ * The algorithm is due to Ron Rivest.  This code was
+ * written by Colin Plumb in 1993, no copyright is claimed.
+ * This code is in the public domain; do with it what you wish.
+ *
+ * Equivalent code is available from RSA Data Security, Inc.
+ * This code has been tested against that, and is equivalent,
+ * except that you don't need to include two pages of legalese
+ * with every copy.
+ *
+ * To compute the message digest of a chunk of bytes, declare an
+ * MD5Context structure, pass it to MD5Init, call MD5Update as
+ * needed on buffers full of bytes, and then call MD5Final, which
+ * will fill a supplied 16-byte array with the digest.
+ *
+ * Changed so as no longer to depend on Colin Plumb's `usual.h' header
+ * definitions; now uses stuff from dpkg's config.h.
+ *  - Ian Jackson <ijackson@nyx.cs.du.edu>.
+ * Still in the public domain.
+ *
+ * Modularised for Nemesis by Stephen Early
+ *
+ * Got the code from Nemesis, but don't need the extras, so I cleaned up
+ * a bit.
+ * pmsac@toxyn.org
+ */
 
 #include <emscripten/emscripten.h>
 #include <string.h>
