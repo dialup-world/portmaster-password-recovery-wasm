@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PortMaster Password Recovery (Wasm)</title>
+</head>
+<body>
+  <h1> PortMaster Password Recovery (Wasm)</h1>
+  <br>
+  This is a little tool to recover the password from PortMaster devices. The <a href="http://home.eversberg.eu/public/portmaster.php">original tool</a> was written in PHP (presumably by <a href="http://eversberg.eu/contact/">jolly</a>, presumably calling <a href="http://home.eversberg.eu/public/mz.c">underlying C code</a>) and this new version is a Wasm/JS implementation built using a modified version of the original C code. 
+  <br>
+  The original tool was tested with several devices like PM2e PM3 PM4.
+  It should also work with other devices that uses similar recovery scheme.
+  <br><br>
+  1. At login prompt enter: <code>!root</code><br>
+  2. At password prompt enter: override<br>
+  3. Write down the 16 character challenge string here: <input type="text" id="challenge" maxlength="16" />
+  <button id="generate">Generate RESPONSE</button><br>
+  <span id="result"></span>
+  <script src="mz_web.js"></script>
+  <script>
+  // Parse URL parameters
+  function getParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+
+  Module().then((instance) => {
+    const get_response = instance.cwrap('get_response', 'void', ['string', 'number']);
+
+    const generateResponse = () => {
+      const input = document.getElementById('challenge').value;
+      if (input.length !== 16) {
+        alert("Input must be exactly 16 characters.");
+        return;
+      }
+
+      const outPtr = instance._malloc(17);
+      get_response(input, outPtr);
+      const output = instance.UTF8ToString(outPtr);
+      document.getElementById('result').innerHTML = "4. At login prompt enter again: <code>!root</code><br>  5. At password prompt enter: <code id=\"output\"></code><br>  6. Be sure to change password '<code>set password &lt;pw&gt;</code>' and save it '<code>save all</code>'";
+      document.getElementById('output').innerText = `${output}`;
+      instance._free(outPtr);
+    };
+
+    // Set up button listener
+    document.getElementById('generate').addEventListener('click', generateResponse);
+
+    // Auto-fill from URL param
+    const challengeFromURL = getParam("challenge");
+    if (challengeFromURL && challengeFromURL.length === 16) {
+      document.getElementById("challenge").value = challengeFromURL;
+      generateResponse();  // Auto-run
+    }
+  });
+  </script>
+</body>
+</html>
