@@ -9,11 +9,11 @@ This should work for the PM2e, PM3, PM4, and similar devices.
 
 A live demo is available at https://dialup.world/portmaster-password/. It seems to work in FireFox, Chrome, and Safari.
 
-Upon loading the page you can follow these instructions:
+Upon loading the page you can follow these instructions on your Portmaster:
 
 1. At login prompt enter: `!root`
 2. At password prompt enter: `override`
-3. Write down the 16 character challenge string here: `<CHALLENGE_STRING>`
+3. Write down the 16 character challenge string here: `<CHALLENGE_STRING>` and enter it into the webpage to receive a `<RESPONSE_STRING>`
 4. At login prompt enter again: `!root`
 5. At password prompt enter: `<RESPONSE_STRING>`
 6. Be sure to change password `set password <pw>` and save it `save all`
@@ -32,7 +32,7 @@ The necessary files to run this tool are `index.htm`, `mz_web.js`, and `mz_web.w
 
 The original `mz.c` file was modified into `mz_web.c` with changes for Wasm. Notably, we cannot call a `main` function via Wasm, so this had to be modified.
 
-Emscripten was used to build `mz_web`. The installation of Emscripten is out of scope for this guide, but after it is installed `mz_web.c` can be compiled via:
+[Emscripten](https://emscripten.org/) was used to build `mz_web`. The installation of Emscripten is out of scope for this guide, but after it is installed `mz_web.c` can be compiled via:
 
 ```
 emcc mz_web.c -o mz_web.js \
